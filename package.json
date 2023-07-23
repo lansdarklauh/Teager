@@ -1,0 +1,27 @@
+{
+  "name": "teager-3d",
+  "version": "1.0.0",
+  "description": "A package based on Three.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lansdarklauh/Teager-3d.git"
+  },
+  "author": "LansDarkLauh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lansdarklauh/Teager-3d/issues"
+  },
+  "homepage": "https://github.com/lansdarklauh/Teager-3d#readme",
+  "devDependencies": {
+    "three": "^0.154.0",
+    "three-bvh-csg": "^0.0.8",
+    "three-mesh-bvh": "^0.6.3",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
+  }
+}
