@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "ES2015",
+        "declaration": true,
+        "strict": false
+    },
+    "include": ["src"],
+    "exclude": ["node_modules"]
+}

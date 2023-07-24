@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack"
+    "build": "webpack",
+    "lint": "eslint src/**"
   },
   "repository": {
     "type": "git",
@@ -13,14 +14,29 @@
   },
   "author": "LansDarkLauh",
   "license": "ISC",
+  "keywords": [
+    "npm",
+    "three.js",
+    "typescript"
+  ],
   "bugs": {
     "url": "https://github.com/lansdarklauh/Teager-3d/issues"
   },
   "homepage": "https://github.com/lansdarklauh/Teager-3d#readme",
   "devDependencies": {
+    "@babel/core": "^7.22.9",
+    "@babel/preset-env": "^7.22.9",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/parser": "^6.1.0",
+    "babel-loader": "^9.1.3",
+    "core-js": "^3.31.1",
+    "eslint": "^8.45.0",
+    "prettier": "^3.0.0",
     "three": "^0.154.0",
     "three-bvh-csg": "^0.0.8",
     "three-mesh-bvh": "^0.6.3",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.1.6",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
   }
