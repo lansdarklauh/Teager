@@ -1,4 +1,5 @@
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
   entry: './src/index.ts',
@@ -7,7 +8,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   resolve: {
-    extensions: [".ts",".js"]
+    extensions: [".ts", ".js"]
   },
   module: {
     rules: [
@@ -17,35 +18,41 @@ module.exports = {
         use: [
           //babel
           {
-              loader: "babel-loader",
-              options: {
-                  // set environment
-                  presets: [
-                      [
-                          "@babel/preset-env",
-                          {
-                            // web request
-                              targets: {
-                                  "chrome": "58",
-                                  "ie": "11"
-                              },
-                              // corejs request
-                              "corejs": "3",
-                              "useBuiltIns": "usage"
-                          }
-                      ]
-                  ]
+            loader: "babel-loader",
+            options: {
+              // set environment
+              presets: [
+                [
+                  "@babel/preset-env",
+                  {
+                    // web request
+                    targets: {
+                      "chrome": "58",
+                      "ie": "11"
+                    },
+                    // corejs request
+                    "corejs": "3",
+                    "useBuiltIns": "usage"
+                  }
+                ]
+              ]
 
-              }
+            }
 
           },
 
           'ts-loader',
-      ],
+        ],
         exclude: "/node-modules/"
       }
     ]
   },
   mode: 'production',
-  devtool: 'source-map'
+  devtool: 'source-map',
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin()
+    ]
+  }
 };

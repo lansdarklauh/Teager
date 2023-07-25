@@ -1,5 +1,5 @@
 import THREE from "./index";
-type Model = (THREE.Mesh | THREE.BufferGeometry | (THREE.Mesh | THREE.BufferGeometry)[]);
+type Model = (string | THREE.Mesh | THREE.BufferGeometry | (THREE.Mesh | THREE.BufferGeometry)[] | string[]);
 declare class Teager {
     scene: THREE.Scene;
     camera: THREE.Camera;
@@ -8,12 +8,26 @@ declare class Teager {
     control: any;
     container: HTMLElement;
     material: THREE.Material;
+    selectedMaterial: THREE.Material;
     clock: THREE.Clock;
-    constructor(container?: HTMLElement, material?: THREE.Material);
-    init(container?: HTMLElement, material?: THREE.Material): void;
+    animateId: number;
+    Grid: THREE.Object3D;
+    GridSize: number[];
+    Axes: THREE.Object3D;
+    raycaster: THREE.Raycaster;
+    constructor(container?: HTMLElement, material?: THREE.Material, selectedMaterial?: THREE.Material | boolean);
+    init(container?: HTMLElement, material?: THREE.Material, selectedMaterial?: THREE.Material, grid?: number[] | boolean, axes?: number | boolean): void;
     private resize;
     private render;
     private animate;
-    addModels(models: Model, material?: THREE.Material): any[];
+    initClickEvent(cb?: Function): void;
+    selectModel(e: MouseEvent, cb?: Function): void;
+    resetScene(clearModels?: Boolean): void;
+    changeCameraDirection: (direction: string, callBack: Function, time?: number) => void;
+    changeCameraDistance: (distance: number, callBack: Function, time?: number) => void;
+    addModels(models: Model, material?: THREE.Material, center?: boolean, computePositon?: boolean): any[];
+    computeModelsPosition(modelsMesh: THREE.Mesh[], computeBox?: boolean): THREE.Mesh[];
+    removeModels(models: Model): boolean;
+    destory(): void;
 }
 export default Teager;
