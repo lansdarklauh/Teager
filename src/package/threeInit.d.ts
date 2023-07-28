@@ -15,6 +15,7 @@ declare class Teager {
     GridSize: number[];
     Axes: THREE.Object3D;
     raycaster: THREE.Raycaster;
+    removeClickEvent: Function;
     constructor(container?: HTMLElement, material?: THREE.Material, selectedMaterial?: THREE.Material | boolean);
     init(container?: HTMLElement, material?: THREE.Material, selectedMaterial?: THREE.Material, grid?: number[] | boolean, axes?: number | boolean): void;
     private resize;

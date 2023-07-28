@@ -1,5 +1,5 @@
 import THREE from "./index"
-import { TrackballControl } from "three/examples/jsm/controls/TrackballControls"
+import { TrackballControls } from "three/examples/jsm/controls/TrackballControls"
 import { Direction, modelsLinkedList } from "./static"
 //tweenjs: animation about camera(not only in fact)
 import * as TWEEN from "@tweenjs/tween.js"
@@ -21,6 +21,7 @@ class Teager {
     GridSize: number[]
     Axes: THREE.Object3D
     raycaster: THREE.Raycaster
+    removeClickEvent: Function
 
     constructor(container?: HTMLElement, material?: THREE.Material, selectedMaterial?: THREE.Material | boolean) {
         // Initialising the scene and camera
@@ -63,8 +64,9 @@ class Teager {
         }
         this.renderer.setClearColor(0x1d1d1d)
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight)
-        container.appendChild(this.renderer.domElement)
-        this.control = TrackballControl(this.camera, this.renderer.domElement)
+        this.container.appendChild(this.renderer.domElement)
+        this.control = TrackballControls(this.camera, this.renderer.domElement)
+        this.control.addEventListener('change',)
         this.container.addEventListener('resize', this.resize)
         this.animate()
     }
@@ -84,11 +86,18 @@ class Teager {
         this.animateId = requestAnimationFrame(this.animate)
         this.render()
     }
+    //select model event
     initClickEvent(cb?: Function) {
         if (this.selectedMaterial) {
-            this.raycaster = new THREE.Raycaster()
-            this.raycaster.firstHitOnly = true;
-            this.container.addEventListener('click', (e) => { this.selectModel(e, cb) })
+            if (!this.raycaster) {
+                this.raycaster = new THREE.Raycaster()
+                this.raycaster.firstHitOnly = true;
+            }
+            const func = (e) => { this.selectModel(e, cb) }
+            this.container.addEventListener('click', func)
+            this.removeClickEvent = () => {
+                this.container.removeEventListener('click', func)
+            }
         }
     }
     // change model color when select model (only one).If click in the blank area, return null
@@ -164,7 +173,7 @@ class Teager {
             callBack && callBack()
         }, time)
     }
-    addModels(models: Model, material?: THREE.Material, center?: boolean, computePositon: boolean = true) {
+    addModels(models: Model, material?: THREE.Material, center: boolean = true, computePositon: boolean = true) {
         // Add models to the scene, it can assign custom material
         // center: Let model centre, model will raise on the platform (z = 0)
         // If multiple models are passed in and centred, the position is automatically calculated
