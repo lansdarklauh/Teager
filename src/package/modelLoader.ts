@@ -20,18 +20,25 @@ interface param {
     bevelSegments: number
 }
 
+interface Result {
+    result: THREE.Object3D | null,
+    type: string
+}
+
 class ModelLoader {
     fontLoader: THREE.Loader
     stlLoader: THREE.Loader
     objLoader: THREE.Loader
     gltfLoader: THREE.Loader
-    textureLoader: THREE.Loader
+    stlExporter: any
+    objExporter: any
+    gltfExporter: any
 
     constructor() {
 
     }
     //load model, include obj, stl, gltf
-    loadModel(str: string, url: string | Blob) {
+    loadModel(str: string, url: string | Blob): Promise<Result> {
         return new Promise((resolve, reject) => {
             const loadName = str.toLowerCase()
             let content = typeof url === 'string' ? url : URL.createObjectURL(url)
@@ -45,7 +52,10 @@ class ModelLoader {
                         }),
                             () => { },
                             (err) => {
-                                reject(err)
+                                reject({
+                                    result: err,
+                                    type: 'err'
+                                })
                             }
                     })
                     break;
@@ -58,7 +68,10 @@ class ModelLoader {
                         }),
                             () => { },
                             (err) => {
-                                reject(err)
+                                reject({
+                                    result: err,
+                                    type: 'err'
+                                })
                             }
                     })
                     break;
@@ -71,18 +84,24 @@ class ModelLoader {
                         }),
                             () => { },
                             (err) => {
-                                reject(err)
+                                reject({
+                                    result: err,
+                                    type: 'err'
+                                })
                             }
                     })
                     break;
                 default:
-                    reject('Unknown Model')
+                    reject({
+                        result: null,
+                        type: 'err'
+                    })
                     break;
             }
         })
     }
     //load text, can load font or use default font
-    loadFont(param: Partial<param>, str?: string | Blob) {
+    loadFont(param: Partial<param>, str?: string | Blob): Promise<Result> {
         if (!param || !param.content) {
             console.log('there is no text')
             return
@@ -101,7 +120,10 @@ class ModelLoader {
                             type: 'geometry'
                         })
                     }, () => { }, (err) => {
-                        reject(err)
+                        reject({
+                            result: err,
+                            type: 'err'
+                        })
                     })
                 } else {
                     const reader = new FileReader()
@@ -117,12 +139,18 @@ class ModelLoader {
                                 type: 'geometry'
                             })
                         } else {
-                            reject(result)
+                            reject({
+                                result: result,
+                                type: 'err'
+                            })
                         }
 
                     }
                     reader.onerror = err => {
-                        reject(err)
+                        reject({
+                            result: err,
+                            type: 'err'
+                        })
                     }
                     reader.readAsText(str, 'utf-8')
                 }
@@ -146,16 +174,16 @@ class ModelLoader {
         let result: Blob | null = null
         switch (format.toUpperCase()) {
             case 'obj':
-                this.objLoader = new OBJExporter()
-                result = new Blob([this.objLoader.parse(group)], { type: 'application/octet-stream' })
+                this.objExporter = new OBJExporter()
+                result = new Blob([this.objExporter.parse(group)], { type: 'application/octet-stream' })
                 return result
             case 'stl':
-                this.stlLoader = new STLExporter()
-                result = new Blob([this.stlLoader.parse(group, { binary: true })], { type: 'application/octet-stream' })
+                this.stlExporter = new STLExporter()
+                result = new Blob([this.stlExporter.parse(group, { binary: true })], { type: 'application/octet-stream' })
                 return result
             case 'gltf':
-                this.gltfLoader = new GLTFExporter()
-                this.gltfLoader.parse(
+                this.gltfExporter = new GLTFExporter()
+                this.gltfExporter.parse(
                     group,
                     arrayBuffer => {
                         result = new Blob([JSON.stringify(arrayBuffer)], { type: 'text/plain' })

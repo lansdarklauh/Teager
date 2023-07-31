@@ -66,7 +66,6 @@ class Teager {
         this.renderer.setSize(this.container.clientWidth, this.container.clientHeight)
         this.container.appendChild(this.renderer.domElement)
         this.control = TrackballControls(this.camera, this.renderer.domElement)
-        this.control.addEventListener('change',)
         this.container.addEventListener('resize', this.resize)
         this.animate()
     }
